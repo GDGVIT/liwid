@@ -1,4 +1,4 @@
-package com.liwid.liwid_extension.example.model
+package com.liwid.example.app.model
 
 import com.google.gson.annotations.SerializedName
 

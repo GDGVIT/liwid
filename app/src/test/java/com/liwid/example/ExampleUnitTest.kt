@@ -1,4 +1,4 @@
-package com.liwid.liwid_extension
+package com.liwid.example
 
 import org.junit.Test
 

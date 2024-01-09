@@ -1,6 +1,6 @@
-package com.liwid.liwid_extension.example.util
+package com.liwid.example.app.util
 
-import com.liwid.liwid_extension.BuildConfig
+import com.liwid.example.BuildConfig
 
 const val BASE_URL = "https://apiv2.allsportsapi.com/"
 const val GAME_TYPE = "cricket"

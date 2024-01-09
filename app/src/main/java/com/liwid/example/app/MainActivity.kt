@@ -1,4 +1,4 @@
-package com.liwid.liwid_extension.example
+package com.liwid.example.app
 
 import android.Manifest
 import android.app.Notification
@@ -41,10 +41,10 @@ import android.app.Service
 import android.content.IntentFilter
 import android.os.IBinder
 import androidx.core.content.ContextCompat
-import com.liwid.liwid_extension.example.api.ApiClient
-import com.liwid.liwid_extension.example.model.MatchData
-import com.liwid.liwid_extension.example.model.MatchResponse
-import com.liwid.liwid_extension.R
+import com.liwid.example.app.api.ApiClient
+import com.liwid.example.app.model.MatchData
+import com.liwid.example.app.model.MatchResponse
+import com.liwid.example.R
 
 class MainActivity : ComponentActivity() {
     companion object {

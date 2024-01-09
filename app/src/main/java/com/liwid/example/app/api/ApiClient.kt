@@ -1,6 +1,6 @@
-package com.liwid.liwid_extension.example.api
+package com.liwid.example.app.api
 
-import com.liwid.liwid_extension.example.util.BASE_URL
+import com.liwid.example.app.util.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
