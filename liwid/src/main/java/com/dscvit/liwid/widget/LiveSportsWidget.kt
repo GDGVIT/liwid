@@ -1,6 +1,6 @@
 package com.dscvit.liwid.widget
-import android.content.Context
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import com.dscvit.liwid.LiveWidget
 import com.dscvit.liwid.api.ApiClient
@@ -22,7 +22,7 @@ class LiveSportsWidget(
         private lateinit var params: Map<String, String>
 
         fun create(
-            context: Context,
+            context: Any,
             activity: Activity,
             baseUrl: String,
             endpoint: String,
@@ -31,7 +31,7 @@ class LiveSportsWidget(
             Companion.baseUrl = baseUrl
             Companion.endpoint = endpoint
             Companion.params = params
-            return LiveSportsWidget(context, activity, baseUrl, endpoint, params)
+            return LiveSportsWidget(context as Context, activity, baseUrl, endpoint, params)
         }
 
         fun fetchSportsData() {

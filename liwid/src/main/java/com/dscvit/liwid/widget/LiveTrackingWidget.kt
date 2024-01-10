@@ -1,7 +1,7 @@
 package com.dscvit.liwid.widget
 
-import android.content.Context
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import com.dscvit.liwid.LiveWidget
 import com.dscvit.liwid.api.ApiClient
@@ -16,7 +16,7 @@ class LiveTrackingWidget(
     activity: Activity,
     private val baseUrl: String,
     private val endpoint: String,
-    private val params: Map<String, String>
+    private val params: Map<String, Any>
 ) : LiveWidget(context, activity, WidgetType.TRACKING) {
 
     companion object {
@@ -56,8 +56,14 @@ class LiveTrackingWidget(
             })
         }
 
-        private fun onSuccess(it: TrackerData) {
-            // Handle the success here
+        private fun onSuccess(it: TrackerData): TrackerData {
+            return TrackerData(
+                it.orderId,
+                it.orderStatus,
+                it.orderName,
+                it.orderImage,
+                it.orderDate,
+            )
         }
     }
 }

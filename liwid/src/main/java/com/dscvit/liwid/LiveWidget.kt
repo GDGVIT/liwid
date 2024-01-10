@@ -12,27 +12,26 @@ import androidx.core.content.ContextCompat
 import com.dscvit.liwid.WidgetForegroundService.Companion.startService
 import retrofit2.Call
 
-abstract class LiveWidget(
+open class LiveWidget(
     protected val context: Context,
     protected val activity: Activity,
     protected var widgetType: WidgetType,
     var PERMISSON_REQUEST_CODE: Int=0,
-    var CHANNEL_DESCRIPTION: String="Channel for Live Widget",
-    var CHANNEL_NAME: String="Live Widget Channel",
-    var CHANNEL_ID: String="Live_Widget_Channel_Id",
 ) {
     enum class WidgetType{
         SPORTS,
         TRACKING,
     }
-
+    var CHANNEL_DESCRIPTION: String="Channel for Live Widget"
+    var CHANNEL_NAME: String="Live Widget Channel"
+    var CHANNEL_ID: String="Live_Widget_Channel_Id"
     init {
         createLiveWidgetChannel()
         requestLiveWidgetPermission()
         startService(context, widgetType)
     }
 
-    fun createLiveWidgetChannel() {
+    private fun createLiveWidgetChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
@@ -46,7 +45,7 @@ abstract class LiveWidget(
         }
     }
 
-    fun requestLiveWidgetPermission() {
+    private fun requestLiveWidgetPermission() {
         if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.POST_NOTIFICATIONS
@@ -60,6 +59,15 @@ abstract class LiveWidget(
                 )
             }
         }
+    }
+    fun configureChannel(
+        name: String = "Custom Channel Name",
+        description: String = "Custom Channel Description",
+        id: String = "Custom_Channel_Id"
+    ) {
+        CHANNEL_NAME = name
+        CHANNEL_DESCRIPTION = description
+        CHANNEL_ID = id
     }
     fun <T> Call<T>.enqueue(t: T) {}
 }
