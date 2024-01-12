@@ -12,7 +12,6 @@ This approach grants users immediate access to the dynamic content from their lo
 - [Key Features](#key-features)
 - [Configure](#configure)
 - [Usage](#usage)
-- [Example](#example)
 - [Contributors](#contributors)
 
 ## Key Features
@@ -41,8 +40,59 @@ dependencies {
 }
 ```
 
+User permissions required:
+```xml
+<manifest>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+.
+.
+</manifest>
+```
+
 ## Usage
-## Example
+### Changing the notification channel
+```kotlin
+fun createCustomChannel(context: Context, activity: Activity) {
+  val liveWidget = LiveWidget(context = context, activity = activity, widgetType = LiveWidget.WidgetType.SPORTS)
+// Configure channel settings
+  liveWidget.configureChannel(
+    id = "Custom_Channel_Id",
+    name = "Custom Channel Name",
+    description = "Custom Channel Description"
+  )
+}
+```
+
+### Specifying the API attributes as per widget
+```kotlin
+fun startSportsWidgetService(context: Any) {
+    LiveSportsWidget.create(
+        context = context,
+        activity = context as Activity,
+        baseUrl = BASE_URL,
+        endpoint = GAME_TYPE,
+        params = mapOf(
+            "met" to MATCH_TYPE,
+            "APIkey" to API_KEY,
+            "leagueID" to league_id,
+        )
+    )
+}
+```
+
+### Starting and Stopping the widget service
+```kotlin
+GlobalScope.launch {
+    // Start the widget service
+    LiveSportsWidget.fetchSportsData()
+    // Stop the widget service
+    LiveSportsWidget.stopSportsWidget()
+}
+```
+
 ## Contributors
 <table>
 	<tr align="center">
