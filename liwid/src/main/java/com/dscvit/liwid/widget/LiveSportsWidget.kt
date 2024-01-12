@@ -3,6 +3,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.dscvit.liwid.LiveWidget
+import com.dscvit.liwid.WidgetForegroundService
 import com.dscvit.liwid.api.ApiClient
 import com.dscvit.liwid.api.model.SportsData
 import com.dscvit.liwid.api.model.SportsDataResponse
@@ -70,6 +71,10 @@ class LiveSportsWidget(
                 it.awayTeamResult,
                 it.matchResult
             )
+        }
+
+        fun stopSportsWidget(context: Context) {
+            WidgetForegroundService.stopService(context)
         }
     }
 }

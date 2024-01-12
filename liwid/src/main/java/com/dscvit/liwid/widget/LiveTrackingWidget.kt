@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.dscvit.liwid.LiveWidget
+import com.dscvit.liwid.WidgetForegroundService
 import com.dscvit.liwid.api.ApiClient
 import com.dscvit.liwid.api.model.TrackerData
 import com.dscvit.liwid.api.model.TrackerWidgetData
@@ -64,6 +65,9 @@ class LiveTrackingWidget(
                 it.orderImage,
                 it.orderDate,
             )
+        }
+        fun stopTrackingWidget(context: Context) {
+            WidgetForegroundService.stopService(context)
         }
     }
 }

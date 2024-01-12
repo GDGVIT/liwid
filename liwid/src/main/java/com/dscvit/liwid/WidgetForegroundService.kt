@@ -17,7 +17,12 @@ import com.dscvit.liwid.api.model.SportsData
 import com.dscvit.liwid.api.model.TrackerData
 import com.dscvit.liwid.widget.LiveSportsWidget
 import com.dscvit.liwid.widget.LiveTrackingWidget
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class WidgetForegroundService:Service() {
     companion object{
@@ -32,6 +37,11 @@ class WidgetForegroundService:Service() {
                 putExtra(WIDGET_TYPE_KEY, widgetType)
             }
             ContextCompat.startForegroundService(context, serviceIntent)
+        }
+
+        fun stopService(context:Context){
+            val serviceIntent = Intent(context, WidgetForegroundService::class.java)
+            context.stopService(serviceIntent)
         }
     }
 
