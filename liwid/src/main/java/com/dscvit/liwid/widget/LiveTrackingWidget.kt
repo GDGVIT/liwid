@@ -1,0 +1,77 @@
+package com.dscvit.liwid.widget
+
+import android.app.Activity
+import android.content.Context
+import android.util.Log
+import com.dscvit.liwid.LiveWidget
+import com.dscvit.liwid.WidgetForegroundService
+import com.dscvit.liwid.api.ApiClient
+import com.dscvit.liwid.api.model.TrackerData
+import com.dscvit.liwid.api.model.TrackerWidgetData
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+class LiveTrackingWidget(
+    context: Context,
+    activity: Activity,
+    private val baseUrl: String,
+    private val endpoint: String,
+    private val params: Map<String, Any>
+) : LiveWidget(context, activity, WidgetType.TRACKING) {
+
+    companion object {
+        private lateinit var baseUrl: String
+        private lateinit var endpoint: String
+        private lateinit var params: Map<String, String>
+        fun create(
+            context: Context,
+            activity: Activity,
+            baseUrl: String,
+            endpoint: String,
+            params: Map<String, String>
+        ): LiveTrackingWidget {
+            return LiveTrackingWidget(context, activity, baseUrl, endpoint, params)
+        }
+
+        fun fetchTrackingData() {
+            val apiClient = ApiClient(baseUrl)
+            val trackingCall = apiClient.createApiService().getData(endpoint, params)
+
+            trackingCall.enqueue(object : Callback<TrackerWidgetData> {
+                override fun onResponse(
+                    call: Call<TrackerWidgetData>,
+                    response: Response<TrackerWidgetData>
+                ) {
+                    if (response.isSuccessful) {
+                        val trackingData = response.body()?.result?.firstOrNull()
+                        trackingData?.let { onSuccess(it) }
+                    } else {
+                        onFailure(call, Throwable(response.message()))
+                    }
+                }
+
+                override fun onFailure(call: Call<TrackerWidgetData>, t: Throwable) {
+                    Log.d("LiveTrackingWidget", "onFailure: ${t.message}")
+                }
+            })
+        }
+
+        private fun onSuccess(it: TrackerData): TrackerData {
+            return TrackerData(
+                it.orderId,
+                it.orderStatus,
+                it.orderName,
+                it.orderImage,
+                it.orderDate,
+            )
+        }
+        fun stopTrackingWidget(context: Context) {
+            WidgetForegroundService.stopService(context)
+        }
+    }
+}
+
+fun <T> Call<T>.enqueue(t: T) {
+
+}
