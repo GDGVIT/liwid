@@ -83,12 +83,9 @@ fun startSportsWidgetService(context: Any) {
 }
 ```
 
-### Starting and Stopping the widget service
+### Stopping the widget service
 ```kotlin
 GlobalScope.launch {
-    // Start the widget service
-    LiveSportsWidget.fetchSportsData()
-    // Stop the widget service
     LiveSportsWidget.stopSportsWidget()
 }
 ```
