@@ -37,11 +37,13 @@ class WidgetForegroundService:Service() {
                 putExtra(WIDGET_TYPE_KEY, widgetType)
             }
             ContextCompat.startForegroundService(context, serviceIntent)
+            Log.d("WidgetForegroundService", "Service started")
         }
 
         fun stopService(context:Context){
             val serviceIntent = Intent(context, WidgetForegroundService::class.java)
             context.stopService(serviceIntent)
+            Log.d("WidgetForegroundService", "Service stopped")
         }
     }
 
@@ -70,6 +72,7 @@ class WidgetForegroundService:Service() {
                 }
             }
         }
+        Log.d("WidgetForegroundService", "onStartCommand started")
         return START_STICKY
     }
     private var resSportsData: SportsData? = null
@@ -81,7 +84,8 @@ class WidgetForegroundService:Service() {
             } else {
                var resTrackingData: Unit = LiveTrackingWidget.fetchTrackingData()
             }
-
+            println(resSportsData)
+            Log.d("WidgetForegroundService", "Data fetched")
             // Update the notification content based on the API response data
             val notificationContent = when (widgetType) {
                 LiveWidget.WidgetType.SPORTS -> resSportsData
@@ -109,10 +113,9 @@ class WidgetForegroundService:Service() {
         }
     }
 
-    private val sportsNotificationLayout= RemoteViews("com.example.liwid_app",R.layout.sports_widget_layout_wrapped)
 //    val sportsNotificationLayoutExp= RemoteViews("com.example.liwid_app",R.layout.sports_widget_layout_expanded)
-    private val trackingNotificationLayout= RemoteViews("com.example.liwid_app",R.layout.tracking_widget_layout_wrapped)
-
+    private val trackingNotificationLayout= RemoteViews(baseContext.packageName!!,R.layout.tracking_widget_layout_wrapped)
+    private val sportsNotificationLayout= RemoteViews(baseContext.packageName!!,R.layout.sports_widget_layout_wrapped)
 
     private fun createSportsWidget(notificationContent: SportsData): Notification {
         sportsNotificationLayout.setTextViewText(R.id.league_name,notificationContent.leagueName)
@@ -128,6 +131,7 @@ class WidgetForegroundService:Service() {
         val awayTeamLogoBitmap=Glide.with(this).asBitmap().load(notificationContent.awayTeamLogo).submit().get()
         sportsNotificationLayout.setImageViewBitmap(R.id.smallHomeLogo,homeTeamLogoBitmap)
         sportsNotificationLayout.setImageViewBitmap(R.id.smallAwayLogo,awayTeamLogoBitmap)
+        Log.d("WidgetForegroundService", "Sports widget updated")
         // Implement notification creation logic for SPORTS widget
         return NotificationCompat.Builder(this, channelID)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
@@ -146,6 +150,10 @@ class WidgetForegroundService:Service() {
         return NotificationCompat.Builder(this, channelID)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(trackingNotificationLayout)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setOngoing(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setOnlyAlertOnce(true)
             .build()
     }
 
@@ -155,5 +163,6 @@ class WidgetForegroundService:Service() {
         notificationJob?.cancel()
         stopForeground(true)
         stopSelf()
+        Log.d("WidgetForegroundService", "Service stopped")
     }
 }

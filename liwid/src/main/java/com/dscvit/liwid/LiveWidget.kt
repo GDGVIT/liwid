@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.dscvit.liwid.WidgetForegroundService.Companion.startService
@@ -43,6 +44,7 @@ open class LiveWidget(
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
+        Log.d("LiveWidget", "Channel Created")
     }
 
     private fun requestLiveWidgetPermission() {
@@ -59,6 +61,7 @@ open class LiveWidget(
                 )
             }
         }
+        Log.d("LiveWidget", "Permission Granted")
     }
     fun configureChannel(
         name: String = "Custom Channel Name",
@@ -68,6 +71,7 @@ open class LiveWidget(
         CHANNEL_NAME = name
         CHANNEL_DESCRIPTION = description
         CHANNEL_ID = id
+        Log.d("LiveWidget", "Channel Configured")
     }
     fun <T> Call<T>.enqueue(t: T) {}
 }

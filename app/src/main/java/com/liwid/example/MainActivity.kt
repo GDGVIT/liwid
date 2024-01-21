@@ -4,10 +4,20 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.spacedBy
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,8 +31,7 @@ import com.liwid.example.util.BASE_URL
 import com.liwid.example.util.GAME_TYPE
 import com.liwid.example.util.MATCH_TYPE
 import com.liwid.example.util.league_id
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +44,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class)
 @Composable
 fun LiveWidgetExample() {
     var isWidgetEnabled by remember { mutableStateOf(false) }
@@ -49,11 +58,11 @@ fun LiveWidgetExample() {
                 }
             )
         },
-        content = {
+        content = { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(paddingValues), // use the paddingValues here
                 verticalArrangement = spacedBy(16.dp)
             ) {
                 Text(text = "Toggle the Live Widget:")
@@ -89,6 +98,7 @@ fun createCustomChannel(context: Context, activity: Activity) {
 
 }
 
+@DelicateCoroutinesApi
 fun startSportsWidgetService(context: Any) {
     LiveSportsWidget.create(
         context = context,
@@ -101,16 +111,13 @@ fun startSportsWidgetService(context: Any) {
             "leagueID" to league_id,
         )
     )
-    GlobalScope.launch {
-        LiveSportsWidget.fetchSportsData()
-    }
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewLiveWidgetExample() {
-    CustomTheme() {
+    CustomTheme {
         LiveWidgetExample()
     }
 }
